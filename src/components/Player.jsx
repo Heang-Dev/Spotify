@@ -1,13 +1,17 @@
-import React from "react";
-import { assets, songsData } from "../assets/assets";
+import React, { useContext } from "react";
+import { assets } from "../assets/assets";
+import { PlayerContext } from "../context/PlayerContext";
 const Player = () => {
+  const { seekBar, seekBg, playStatus, play, pause, track } =
+    useContext(PlayerContext);
+
   return (
     <div className="h-[10%] bg-black flex justify-between items-center text-white px-4">
       <div className="items-center hidden gap-4 lg:flex">
-        <img src={songsData[0].image} alt="song_image" className="w-12" />
+        <img src={track.image} alt="song_image" className="w-12" />
         <div>
-          <p>{songsData[0].name}</p>
-          <p>{songsData[0].desc.slice(0, 12)} ...</p>
+          <p>{track.name}</p>
+          <p>{track.desc.slice(0, 12)} ...</p>
         </div>
       </div>
       <div className="flex flex-col items-center gap-1 m-auto">
@@ -22,11 +26,23 @@ const Player = () => {
             alt="prev"
             className="w-4 cursor-pointer"
           />
-          <img
-            src={assets.play_icon}
-            alt="play"
-            className="w-4 cursor-pointer"
-          />
+
+          {playStatus ? (
+            <img
+              onClick={pause}
+              src={assets.pause_icon}
+              alt="play"
+              className="w-4 cursor-pointer"
+            />
+          ) : (
+            <img
+              onClick={play}
+              src={assets.play_icon}
+              alt="play"
+              className="w-4 cursor-pointer"
+            />
+          )}
+
           <img
             src={assets.next_icon}
             alt="next"
@@ -40,8 +56,14 @@ const Player = () => {
         </div>
         <div className="flex items-center gap-5">
           <p>1:56</p>
-          <div className="w-[60vw] max-w-[500px] bg-gray-300 rounded-full cursor-pointer">
-            <hr className="w-0 h-1 bg-green-800 border-none rounded-full" />
+          <div
+            ref={seekBg}
+            className="w-[60vw] max-w-[500px] bg-gray-300 rounded-full cursor-pointer"
+          >
+            <hr
+              ref={seekBar}
+              className="w-0 h-1 bg-green-800 border-none rounded-full"
+            />
           </div>
           <p>3:11</p>
         </div>
